@@ -5,22 +5,18 @@ import com.multi.tenant.entity.QSysRole;
 import com.multi.tenant.entity.QSysUser;
 import com.multi.tenant.entity.QSysUserRole;
 import com.multi.tenant.entity.SysUser;
-import com.multi.tenant.multitenancy.TenantContextHolder;
 import com.multi.tenant.qo.SysUserQO;
 import com.multi.tenant.repository.SysUserRepository;
 import com.multi.tenant.service.SysUserService;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -66,5 +62,17 @@ public class SysUserServiceImpl implements SysUserService {
             BeanUtils.copyProperties(t, sysUserDTO);
             return sysUserDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateUser(SysUserQO sysUserQO) {
+//        SysUser sysUser = new SysUser();
+//        BeanUtils.copyProperties(sysUserQO, sysUser);
+//        sysUser.setId("402838817fa74405017fa74692700000");
+//        sysUserRepository.save(sysUser);
+        Long size = jpaQueryFactory.update(qSysUser).set(qSysUser.phone, sysUserQO.getPhone()).where(qSysUser.userName.eq(sysUserQO.getUserName())).execute();
+        return size > 0;
+//        return true;
     }
 }

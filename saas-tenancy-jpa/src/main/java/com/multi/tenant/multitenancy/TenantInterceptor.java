@@ -4,10 +4,7 @@ import com.multi.tenant.task.SpringContextHolder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.expression.BinaryExpression;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.NotExpression;
-import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
@@ -163,6 +160,19 @@ public class TenantInterceptor implements StatementInspector {
             // 过滤退出执行
             return;
         }
+        List<Column> columns = update.getColumns();
+        if (!columns.stream().map(Column::getColumnName).anyMatch(i -> i.equals("updateName"))) {
+            // 针对已给出updateName 不处理
+            columns.add(new Column("update_name"));
+            update.getExpressions().add(new StringValue("aaaa"));
+//            FromItem itemsList = update.getFromItem();
+//            if (itemsList instanceof MultiExpressionList) {
+//                ((MultiExpressionList) itemsList).getExprList().forEach(el -> el.getExpressions().add(new StringValue("test")));
+//            } else {
+//                ((ExpressionList) itemsList).getExpressions().add(new StringValue("test"));
+//            }
+        }
+
         update.setWhere(this.andExpression(table, update.getWhere()));
     }
 

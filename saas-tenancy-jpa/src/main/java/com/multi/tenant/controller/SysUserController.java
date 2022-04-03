@@ -28,6 +28,11 @@ public class SysUserController {
         return Result.ok(userService.saveUser(sysUserQO));
     }
 
+    @PostMapping("/update")
+    public Result update(@RequestBody SysUserQO sysUserQO) {
+        return Result.ok(userService.updateUser(sysUserQO));
+    }
+
     @PostMapping("/page")
     public Result page(@RequestBody SysUserQO sysUserQO) {
         return Result.ok(userService.page(sysUserQO));

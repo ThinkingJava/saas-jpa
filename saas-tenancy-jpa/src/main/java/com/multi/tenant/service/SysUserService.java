@@ -18,4 +18,5 @@ public interface SysUserService {
      */
     List<SysUserDTO> page(SysUserQO sysUserQO);
 
+    Boolean updateUser(SysUserQO sysUserQO);
 }

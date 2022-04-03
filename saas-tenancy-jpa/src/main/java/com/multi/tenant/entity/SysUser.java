@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +19,7 @@ import java.time.LocalDateTime;
 @Data
 @ApiModel(value = "用户")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 public class SysUser implements Serializable {
@@ -44,12 +50,14 @@ public class SysUser implements Serializable {
     /**
      * 创建时间
      */
+    @CreatedDate
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
+    @LastModifiedDate
     @ApiModelProperty(value = "修改时间")
     private LocalDateTime updateTime;
 
@@ -72,5 +80,18 @@ public class SysUser implements Serializable {
     @Column(name = "tenant_id", insertable = false,updatable = false)
     @ApiModelProperty(value = "用户所属租户id")
     private String tenantId;
+
+    /**
+     * 更新人
+     */
+    @CreatedBy
+    @ApiModelProperty(value = "更新人")
+    private String createName;
+    /**
+     * 更新人
+     */
+    @LastModifiedBy
+    @ApiModelProperty(value = "更新人")
+    private String updateName;
 
 }
